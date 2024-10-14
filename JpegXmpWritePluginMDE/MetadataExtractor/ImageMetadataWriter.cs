@@ -65,47 +65,59 @@ namespace JpegXmpWritePluginMDE.MetadataExtractor
 		{
 			using (var stream = new FileStream(filePath, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))
 			{
-				var fileType = FileTypeDetector.DetectFileType(stream);
-				try
-				{
-					switch (fileType)
-					{
-						case FileType.Jpeg:
-							JpegMetadataWriter.WriteMetadata(stream, metadata);
-							break;
-							//case FileType.Tiff:
-							//case FileType.Arw:
-							//case FileType.Cr2:
-							//case FileType.Nef:
-							//case FileType.Orf:
-							//case FileType.Rw2:
-							//    return TiffMetadataReader.ReadMetadata(stream);
-							//case FileType.Psd:
-							//    return PsdMetadataReader.ReadMetadata(stream);
-							//case FileType.Png:
-							//    return PngMetadataReader.ReadMetadata(stream);
-							//case FileType.Bmp:
-							//    return new[] { BmpMetadataReader.ReadMetadata(stream) };
-							//case FileType.Gif:
-							//    return new[] { GifMetadataReader.ReadMetadata(stream) };
-							//case FileType.Ico:
-							//    return IcoMetadataReader.ReadMetadata(stream);
-							//case FileType.Pcx:
-							//    return new[] { PcxMetadataReader.ReadMetadata(stream) };
-							//case FileType.Riff:
-							//    return WebPMetadataReader.ReadMetadata(stream);
-							//case FileType.Raf:
-							//    return RafMetadataReader.ReadMetadata(stream);
-							//case FileType.QuickTime:
-							//    return QuicktimeMetadataReader.ReadMetadata(stream);
-					}
-				}
-				catch (Exception)
-				{
-
-					throw new ImageProcessingException("File format is not supported");
-				}
+				WriteMetadata(stream, metadata);
 			}
+		}
+
+		public static void WriteMetadata(Stream stream, IEnumerable<object> metadata)
+		{
+			try
+			{
+				JpegMetadataWriter.WriteMetadata(stream, metadata);
+			}
+			catch (Exception ex)
+			{
+				throw new ImageProcessingException("File format is not supported", ex);
+			}
+			// var fileType = FileTypeDetector.DetectFileType(stream);
+			// try
+			// {
+			// 	switch (fileType)
+			// 	{
+			// 		case FileType.Jpeg:
+			// 			JpegMetadataWriter.WriteMetadata(stream, metadata);
+			// 			break;
+			// 			//case FileType.Tiff:
+			// 			//case FileType.Arw:
+			// 			//case FileType.Cr2:
+			// 			//case FileType.Nef:
+			// 			//case FileType.Orf:
+			// 			//case FileType.Rw2:
+			// 			//    return TiffMetadataReader.ReadMetadata(stream);
+			// 			//case FileType.Psd:
+			// 			//    return PsdMetadataReader.ReadMetadata(stream);
+			// 			//case FileType.Png:
+			// 			//    return PngMetadataReader.ReadMetadata(stream);
+			// 			//case FileType.Bmp:
+			// 			//    return new[] { BmpMetadataReader.ReadMetadata(stream) };
+			// 			//case FileType.Gif:
+			// 			//    return new[] { GifMetadataReader.ReadMetadata(stream) };
+			// 			//case FileType.Ico:
+			// 			//    return IcoMetadataReader.ReadMetadata(stream);
+			// 			//case FileType.Pcx:
+			// 			//    return new[] { PcxMetadataReader.ReadMetadata(stream) };
+			// 			//case FileType.Riff:
+			// 			//    return WebPMetadataReader.ReadMetadata(stream);
+			// 			//case FileType.Raf:
+			// 			//    return RafMetadataReader.ReadMetadata(stream);
+			// 			//case FileType.QuickTime:
+			// 			//    return QuicktimeMetadataReader.ReadMetadata(stream);
+			// 	}
+			// }
+			// catch (Exception)
+			// {
+			// 	throw new ImageProcessingException("File format is not supported");
+			// }
 		}
 	}
 }
